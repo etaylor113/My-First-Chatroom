@@ -10,10 +10,12 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    class Server
+   
+    public class Server
     {
-        public static Client client;
+        public static ServerClient client;
         TcpListener server;
+        public string UserName;
         public Server()
         {
             server = new TcpListener(IPAddress.Parse("127.0.0.1"), 9999);
@@ -34,9 +36,11 @@ namespace Server
         {
             TcpClient clientSocket = default(TcpClient);
             clientSocket = server.AcceptTcpClient();
-            Console.WriteLine("Connected");
+            Console.WriteLine("Enter your username.");
+            UserName = Console.ReadLine();           
+            Console.WriteLine(UserName + "Connected");
             NetworkStream stream = clientSocket.GetStream();
-            client = new Client(stream, clientSocket);
+            client = new ServerClient(stream, clientSocket);
         }
         private void Respond(string body)
         {

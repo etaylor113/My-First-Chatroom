@@ -7,16 +7,21 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    class Client
+    public class ServerClient
     {
         NetworkStream stream;
-        TcpClient client;
+        TcpClient client;       
         public string UserId;
-        public Client(NetworkStream Stream, TcpClient Client)
-        {
+
+        Dictionary<string, string> users = new Dictionary<string, string>();
+        
+
+        public ServerClient(NetworkStream Stream, TcpClient Client)
+        {           
+            UserId = Guid.NewGuid().ToString();               
             stream = Stream;
             client = Client;
-            UserId = Guid.NewGuid().ToString();
+            
         }
         public void Send(string Message)
         {
