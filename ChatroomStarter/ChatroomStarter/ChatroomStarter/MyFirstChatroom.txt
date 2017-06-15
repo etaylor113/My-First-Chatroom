@@ -1,0 +1,2 @@
+﻿Opening repositories:
+C:\Users\Taylo\Desktop\DevProjects\C# Visual Studio\My-First-Chatroom
