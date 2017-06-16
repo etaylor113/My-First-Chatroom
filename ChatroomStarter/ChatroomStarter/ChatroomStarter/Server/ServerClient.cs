@@ -30,15 +30,26 @@ namespace Server
         }
         public void Send(string Message)
         {
-            
+           
         }
+
         public string Recieve()
         {
-            byte[] recievedMessage = new byte[256];           
-            stream.Read(recievedMessage, 0, recievedMessage.Length);
-            string recievedMessageString = Encoding.ASCII.GetString(recievedMessage);
-            Console.WriteLine(recievedMessageString);
-            return recievedMessageString;
+            try
+            {
+                byte[] recievedMessage = new byte[256];              
+                stream.Read(recievedMessage, 0, recievedMessage.Length);
+                string recievedMessageString = Encoding.ASCII.GetString(recievedMessage);
+                Console.WriteLine(recievedMessageString);
+                return recievedMessageString;
+            }
+            catch
+            {
+                Console.WriteLine("A user has left the room.");
+                Console.ReadLine();
+                Environment.Exit(0);
+                return Console.ReadLine();
+            }
         }
 
     }

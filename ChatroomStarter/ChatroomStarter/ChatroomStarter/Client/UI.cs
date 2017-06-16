@@ -15,7 +15,11 @@ namespace Client
         public static string GetInput()
         {
             string input = Console.ReadLine();
-            return input;
+            if (input == "/leave")
+            {
+                Environment.Exit(0);
+            }           
+                return input;                      
         }
 
         public static string GetUserName()
@@ -23,7 +27,6 @@ namespace Client
             Console.WriteLine("Please enter your username:");
             string userName = Console.ReadLine();
             return userName;
-        }
-        
+        }        
     }
 }

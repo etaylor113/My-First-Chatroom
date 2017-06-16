@@ -16,6 +16,7 @@ namespace Server
         public static ServerClient client;       
         TcpListener server;
         public string userName;
+        public bool serverRunning = true;
         public List<byte> nameList = new List<byte>();
         public Dictionary<string, string> users = new Dictionary<string, string>
         {
@@ -30,17 +31,23 @@ namespace Server
 
         public void Run()
         {
-            string message;       
-            bool userLoop = true;
-         
-            while (userLoop == true)
+            string message;                 
+            while (serverRunning == true)
             {
                 AcceptClient();
                 AddDictionary();
                 DisplayUserConnection();
                 message = client.Recieve();
-                Respond(message);               
+                Respond(message);
+                TestServerUsers();
             }          
+        }
+        public void TestServerUsers()
+        {
+            if (users.Count == 0)
+            {
+                serverRunning = false;
+            }
         }
 
         public void AddDictionary()
@@ -58,7 +65,7 @@ namespace Server
         {
             TcpClient clientSocket = default(TcpClient);
             clientSocket = server.AcceptTcpClient();                      
-            Console.WriteLine(" " );        
+            Console.WriteLine(" ");        
             NetworkStream stream = clientSocket.GetStream();
             client = new ServerClient(stream, clientSocket);            
         }
