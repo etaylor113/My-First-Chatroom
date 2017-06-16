@@ -58,7 +58,7 @@ namespace Server
         {
             TcpClient clientSocket = default(TcpClient);
             clientSocket = server.AcceptTcpClient();                      
-            Console.WriteLine("Connected");        
+            Console.WriteLine(" " );        
             NetworkStream stream = clientSocket.GetStream();
             client = new ServerClient(stream, clientSocket);            
         }

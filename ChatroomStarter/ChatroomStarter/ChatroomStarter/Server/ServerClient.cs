@@ -12,25 +12,29 @@ namespace Server
         NetworkStream stream;
         TcpClient client;       
         public string UserId;
-
-        Dictionary<string, string> users = new Dictionary<string, string>();
+        public string UserName;    
         
-
+ 
         public ServerClient(NetworkStream Stream, TcpClient Client)
         {           
             UserId = Guid.NewGuid().ToString();               
             stream = Stream;
-            client = Client;
-            
+            client = Client;        
+        }
+
+        public void ReceiveUserName()
+        {
+            byte[] recievedMessage = new byte[256];
+            stream.Read(recievedMessage, 0, recievedMessage.Length);
+            string UserName = Recieve();           
         }
         public void Send(string Message)
         {
-            byte[] message = Encoding.ASCII.GetBytes(Message);
-            stream.Write(message, 0, message.Count());
+            
         }
         public string Recieve()
         {
-            byte[] recievedMessage = new byte[256];
+            byte[] recievedMessage = new byte[256];           
             stream.Read(recievedMessage, 0, recievedMessage.Length);
             string recievedMessageString = Encoding.ASCII.GetString(recievedMessage);
             Console.WriteLine(recievedMessageString);

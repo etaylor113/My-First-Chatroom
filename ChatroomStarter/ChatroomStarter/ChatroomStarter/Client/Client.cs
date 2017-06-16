@@ -12,19 +12,29 @@ namespace Client
     {
         TcpClient clientSocket;
         NetworkStream stream;
+        public string UserName;
+        public string messageString;
       
-
         public Client(string IP, int port)
-        {           
+        {
+            UserName = UI.GetUserName();
             clientSocket = new TcpClient();
             clientSocket.Connect(IPAddress.Parse(IP), port);
-            stream = clientSocket.GetStream();
+            stream = clientSocket.GetStream();         
+        }       
+
+        public void SendUserName()
+        {           
+            byte[] messageUser = Encoding.ASCII.GetBytes(UserName);
+            stream.Write(messageUser, 0, messageUser.Count());            
         }
-        public void Send()
-        {
+
+        public string Send()
+        {           
             string messageString = UI.GetInput();
             byte[] message = Encoding.ASCII.GetBytes(messageString);
             stream.Write(message, 0, message.Count());
+            return messageString;
         }
         public void Recieve()
         {
@@ -34,3 +44,5 @@ namespace Client
         }
     }
 }
+
+

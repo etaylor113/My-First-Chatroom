@@ -14,7 +14,16 @@ namespace Client
         }
         public static string GetInput()
         {
-            return Console.ReadLine();
+            string input = Console.ReadLine();
+            return input;
         }
+
+        public static string GetUserName()
+        {
+            Console.WriteLine("Please enter your username:");
+            string userName = Console.ReadLine();
+            return userName;
+        }
+        
     }
 }
