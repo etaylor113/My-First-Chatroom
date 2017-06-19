@@ -24,23 +24,17 @@ namespace Client
             stream = clientSocket.GetStream();
         }
 
-        public void runClient()
+        public void RunClient()
         {
+            runUserMsg = true;
             while (runUserMsg == true)
-            {
-                if(UI.GetInput() == "/leave")
+            {              
+                messageString = Send();
+                if (messageString == "/leave")
                 {
-                    runUserMsg = false;
+                    Exit();
                 }
-                if(userName != null)
-                {
-                    Client client = new Client("127.0.0.1", 9999);
-                    client.SendUserName();
-                    client.runClient();
-                    Console.ReadLine();
-                }
-                Send();
-                Recieve();
+                Recieve();                                            
             }          
         }
 
@@ -62,6 +56,11 @@ namespace Client
             byte[] recievedMessage = new byte[256];
             stream.Read(recievedMessage, 0, recievedMessage.Length);
             UI.DisplayMessage(Encoding.ASCII.GetString(recievedMessage));
+        }
+
+        private void Exit()
+        {
+            runUserMsg = false;
         }
     }
 }

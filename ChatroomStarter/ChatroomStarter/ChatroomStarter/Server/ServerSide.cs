@@ -11,10 +11,10 @@ using System.Collections;
 
 namespace Server
 {
-   
+
     public class Server
     {
-        public static ServerClient client;       
+        public static ServerClient client;
         TcpListener server;
         public string userName;
         public bool userCheck;
@@ -26,28 +26,28 @@ namespace Server
         {
 
         };
-       
+
         public Server()
         {
             server = new TcpListener(IPAddress.Parse("127.0.0.1"), 9999);
             server.Start();
-        }     
+        }
 
         public void Run()
         {
-            string message;                          
+            string message;
+            bool serverRunning = true;
+
+            CheckDictionary();
+            AcceptClient();
+            AddDictionary();
+            DisplayUserConnection();
             while (serverRunning == true)
-            {
-                if (userCheck == false)
-                {
-                    AcceptClient();
-                    AddDictionary();
-                }                
-                DisplayUserConnection();
+            {               
                 message = client.Recieve(storedMessages);
                 Respond(message);
                 TestServerUsers();
-            }          
+            }
         }
         public void TestServerUsers()
         {
@@ -59,26 +59,26 @@ namespace Server
 
         public void AddDictionary()
         {
-            userName = client.Recieve(storedMessages);          
+            userName = client.Recieve(storedMessages);
             users.Add(userName, client.userId);
         }
 
         public void DisplayUserConnection()
         {
             Console.Write("Connected: " + userName + "\n");
-        }      
-      
+        }
+
         private void AcceptClient()
         {
-            TcpClient clientSocket = default(TcpClient);           
-            clientSocket = server.AcceptTcpClient();                      
-            Console.WriteLine(" ");        
+            TcpClient clientSocket = default(TcpClient);
+            clientSocket = server.AcceptTcpClient();
+            Console.WriteLine(" ");
             NetworkStream stream = clientSocket.GetStream();
-            client = new ServerClient(stream, clientSocket);            
+            client = new ServerClient(stream, clientSocket);
         }
         private void Respond(string body)
         {
-             client.Send(body);
+            client.Send(body);
         }
 
         public bool CheckDictionary()
@@ -87,13 +87,13 @@ namespace Server
             foreach (KeyValuePair<string, string> name in users)
             {
                 if (users.ContainsKey(userName))
-                    {
-                    userCheck = true;                   
-                    }
+                {
+                    userCheck = true;
+                }
                 else
                 {
                     userCheck = false;
-                }              
+                }
             }
             return userCheck;
         }

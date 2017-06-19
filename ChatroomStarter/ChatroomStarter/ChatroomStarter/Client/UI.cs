@@ -14,6 +14,7 @@ namespace Client
         }
         public static string GetInput()
         {
+            Console.WriteLine("Type a message");
             string input = Console.ReadLine();                       
                 return input;                      
         }
