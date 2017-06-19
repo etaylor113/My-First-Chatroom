@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace Server
 {
@@ -18,11 +19,12 @@ namespace Server
         public string userName;
         public bool serverRunning = true;
         public List<byte> nameList = new List<byte>();
+        public Queue<string> storedMessages = new Queue<string>();
         public Dictionary<string, string> users = new Dictionary<string, string>
         {
 
         };
-
+       
         public Server()
         {
             server = new TcpListener(IPAddress.Parse("127.0.0.1"), 9999);
@@ -37,7 +39,7 @@ namespace Server
                 AcceptClient();
                 AddDictionary();
                 DisplayUserConnection();
-                message = client.Recieve();
+                message = client.Recieve(storedMessages);
                 Respond(message);
                 TestServerUsers();
             }          
@@ -52,8 +54,8 @@ namespace Server
 
         public void AddDictionary()
         {
-            userName = client.Recieve();           
-            users.Add(userName, client.UserId);
+            userName = client.Recieve(storedMessages);          
+            users.Add(userName, client.userId);
         }
 
         public void DisplayUserConnection()
@@ -64,6 +66,7 @@ namespace Server
         private void AcceptClient()
         {
             TcpClient clientSocket = default(TcpClient);
+                        
             clientSocket = server.AcceptTcpClient();                      
             Console.WriteLine(" ");        
             NetworkStream stream = clientSocket.GetStream();
@@ -72,6 +75,11 @@ namespace Server
         private void Respond(string body)
         {
              client.Send(body);
+        }
+
+        public void CheckDictionary()
+        {
+
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Client
             if (input == "/leave")
             {
                 Environment.Exit(0);
+                GetInput();
             }           
                 return input;                      
         }

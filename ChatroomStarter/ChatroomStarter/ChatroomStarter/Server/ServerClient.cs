@@ -11,42 +11,43 @@ namespace Server
     {
         NetworkStream stream;
         TcpClient client;       
-        public string UserId;
+        public string userId;
         public string UserName;    
         
  
         public ServerClient(NetworkStream Stream, TcpClient Client)
         {           
-            UserId = Guid.NewGuid().ToString();               
+            userId = Guid.NewGuid().ToString();               
             stream = Stream;
             client = Client;        
         }
 
-        public void ReceiveUserName()
-        {
-            byte[] recievedMessage = new byte[256];
-            stream.Read(recievedMessage, 0, recievedMessage.Length);
-            string UserName = Recieve();           
-        }
+        //public void ReceiveUserName()
+        //{
+        //    byte[] recievedMessage = new byte[256];
+        //    stream.Read(recievedMessage, 0, recievedMessage.Length);
+        //    string UserName = Recieve();           
+        //}
         public void Send(string Message)
         {
-           
+           byte [] message = Encoding.ASCII.GetBytes(Message);
+           stream.Write(message, 0, message.Count());
         }
 
-        public string Recieve()
+        public string Recieve(Queue<string> storedMessages)
         {
             try
             {
                 byte[] recievedMessage = new byte[256];              
                 stream.Read(recievedMessage, 0, recievedMessage.Length);
                 string recievedMessageString = Encoding.ASCII.GetString(recievedMessage);
+                storedMessages.Enqueue(recievedMessageString);
                 Console.WriteLine(recievedMessageString);
                 return recievedMessageString;
             }
             catch
             {
                 Console.WriteLine("A user has left the room.");
-                Console.ReadLine();
                 Environment.Exit(0);
                 return Console.ReadLine();
             }
