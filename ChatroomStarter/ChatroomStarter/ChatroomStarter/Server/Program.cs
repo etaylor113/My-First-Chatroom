@@ -9,13 +9,9 @@ namespace Server
     class Program
     {
         static void Main(string[] args)
-        {
-            bool serverBool = true;
-            do
-            {
+        {           
                 new Server().Run();
-                Console.ReadLine();
-            } while (serverBool == true);
+                Console.ReadLine();            
         }
     }
 }

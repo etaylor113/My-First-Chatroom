@@ -7,19 +7,14 @@ using System.Threading.Tasks;
 namespace Client
 {
     public static class UI
-    {
+    {       
         public static void DisplayMessage(string message)
         {
             Console.WriteLine(message);
         }
         public static string GetInput()
         {
-            string input = Console.ReadLine();
-            if (input == "/leave")
-            {
-                Environment.Exit(0);
-                GetInput();
-            }           
+            string input = Console.ReadLine();                       
                 return input;                      
         }
 

@@ -17,7 +17,9 @@ namespace Server
         public static ServerClient client;       
         TcpListener server;
         public string userName;
-        public bool serverRunning = true;
+        public bool userCheck;
+        public bool serverRunning;
+
         public List<byte> nameList = new List<byte>();
         public Queue<string> storedMessages = new Queue<string>();
         public Dictionary<string, string> users = new Dictionary<string, string>
@@ -33,11 +35,14 @@ namespace Server
 
         public void Run()
         {
-            string message;                 
+            string message;                          
             while (serverRunning == true)
             {
-                AcceptClient();
-                AddDictionary();
+                if (userCheck == false)
+                {
+                    AcceptClient();
+                    AddDictionary();
+                }                
                 DisplayUserConnection();
                 message = client.Recieve(storedMessages);
                 Respond(message);
@@ -65,8 +70,7 @@ namespace Server
       
         private void AcceptClient()
         {
-            TcpClient clientSocket = default(TcpClient);
-                        
+            TcpClient clientSocket = default(TcpClient);           
             clientSocket = server.AcceptTcpClient();                      
             Console.WriteLine(" ");        
             NetworkStream stream = clientSocket.GetStream();
@@ -77,9 +81,23 @@ namespace Server
              client.Send(body);
         }
 
-        public void CheckDictionary()
+        public bool CheckDictionary()
         {
-
+            bool userCheck = false;
+            foreach (KeyValuePair<string, string> name in users)
+            {
+                if (users.ContainsKey(userName))
+                    {
+                    userCheck = true;                   
+                    }
+                else
+                {
+                    userCheck = false;
+                }              
+            }
+            return userCheck;
         }
+
+
     }
 }

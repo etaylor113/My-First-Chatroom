@@ -14,23 +14,44 @@ namespace Client
         NetworkStream stream;
         public string userName;
         public string messageString;
-      
+        public bool runUserMsg = true;
+
         public Client(string IP, int port)
         {
             userName = UI.GetUserName();
             clientSocket = new TcpClient();
             clientSocket.Connect(IPAddress.Parse(IP), port);
-            stream = clientSocket.GetStream();         
-        }       
+            stream = clientSocket.GetStream();
+        }
+
+        public void runClient()
+        {
+            while (runUserMsg == true)
+            {
+                if(UI.GetInput() == "/leave")
+                {
+                    runUserMsg = false;
+                }
+                if(userName != null)
+                {
+                    Client client = new Client("127.0.0.1", 9999);
+                    client.SendUserName();
+                    client.runClient();
+                    Console.ReadLine();
+                }
+                Send();
+                Recieve();
+            }          
+        }
 
         public void SendUserName()
-        {           
+        {
             byte[] messageUser = Encoding.ASCII.GetBytes(userName);
-            stream.Write(messageUser, 0, messageUser.Count());            
+            stream.Write(messageUser, 0, messageUser.Count());
         }
 
         public string Send()
-        {           
+        {
             string messageString = UI.GetInput();
             byte[] message = Encoding.ASCII.GetBytes(messageString);
             stream.Write(message, 0, message.Count());
