@@ -12,7 +12,7 @@ namespace Client
     {
         TcpClient clientSocket;
         NetworkStream stream;
-        static public string userName;
+        public string userName;
         public string messageString;
         public bool runUserMsg = true;
 
@@ -60,7 +60,7 @@ namespace Client
 
         public void Recieve()
         {
-            byte[] recievedMessage = new byte[256];
+            byte[] recievedMessage = new byte[150];
             stream.Read(recievedMessage, 0, recievedMessage.Length);
             UI.DisplayMessage(Encoding.ASCII.GetString(recievedMessage));
         }

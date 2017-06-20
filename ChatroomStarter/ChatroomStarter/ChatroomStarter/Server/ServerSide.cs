@@ -39,6 +39,7 @@ namespace Server
 
             CheckDictionary();
             AcceptClient();
+            client.RecieveUserName();
             AddDictionary();
             DisplayUserConnection();
             while (serverRunning == true)
@@ -58,9 +59,8 @@ namespace Server
 
         public void AddDictionary()
         {       
-           string UserName = client.Recieve(storedMessages);
-
-            users.Add(UserName, client.userId);
+            userName = client.Recieve(storedMessages);
+            users.Add(userName, client.userId);
         }
 
         public void DisplayUserConnection()
@@ -70,7 +70,7 @@ namespace Server
 
         public void DisplayUserExit()
         {
-            Console.Write(userName + " has disconnected.");
+            Console.Write("Disconnected: " + userName + "\n");
         }
 
 

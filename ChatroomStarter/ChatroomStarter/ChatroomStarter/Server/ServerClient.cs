@@ -18,7 +18,7 @@ namespace Server
         {           
             userId = Guid.NewGuid().ToString();               
             stream = Stream;
-            client = Client;        
+            client = Client;               
         }
 
         //public void ReceiveUserName()
@@ -27,6 +27,7 @@ namespace Server
         //    stream.Read(recievedMessage, 0, recievedMessage.Length);
         //    string UserName = Recieve();           
         //}
+
         public void Send(string Message)
         {
             try
@@ -40,16 +41,24 @@ namespace Server
             }
         }
 
+        public string RecieveUserName()
+        {          
+            byte[] recievedName = new byte[150];
+            stream.Read(recievedName, 0, recievedName.Length);
+            userName = Encoding.ASCII.GetString(recievedName).Replace("\0", string.Empty);
+            return userName;
+        }
+
         public string Recieve(Queue<string> storedMessages)
         {
-            string recievedMessageString= "";
+            string recievedMessageString = "";
             try
             {
-                byte[] recievedMessage = new byte[256];              
+                byte[] recievedMessage = new byte[150];              
                 stream.Read(recievedMessage, 0, recievedMessage.Length);
-                recievedMessageString = Encoding.ASCII.GetString(recievedMessage).Replace("/0",string.Empty);
+                recievedMessageString = Encoding.ASCII.GetString(recievedMessage).Replace("\0",string.Empty);
                 storedMessages.Enqueue(recievedMessageString);
-                Console.WriteLine(recievedMessageString);                
+                Console.WriteLine(userName + ": " + recievedMessageString);                
             }
             catch
             {
@@ -60,7 +69,7 @@ namespace Server
 
         public void DisplayUserDisconnected()
         {
-            Console.WriteLine(Client.Client.userName + " has left the room.");
+            Console.WriteLine(userName + " has left the room.");
         }
     }
 }
