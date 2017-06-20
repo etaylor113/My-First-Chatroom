@@ -18,7 +18,6 @@ namespace Server
         TcpListener server;
         public bool userCheck;
         public bool serverRunning;
-        public string userName;
         public List<byte> nameList = new List<byte>();
         public Queue<string> storedMessages = new Queue<string>();
         public Dictionary<string, string> users = new Dictionary<string, string>
@@ -36,43 +35,48 @@ namespace Server
         {
             string message;
             bool serverRunning = true;
-
             CheckDictionary();
             AcceptClient();
             client.RecieveUserName();
-            AddDictionary();
             DisplayUserConnection();
+            AddDictionary();
             while (serverRunning == true)
-            {               
-                message = client.Recieve(storedMessages);
-                Respond(message);
+            {
                 TestServerUsers();
+                message = client.Recieve(storedMessages);
+                Respond(message);              
             }
         }
+
         public void TestServerUsers()
         {
             if (users.Count == 0)
             {
                 serverRunning = false;
+                Console.WriteLine("No users in chatroom. Server shutting down.");
+                Thread.Sleep(2000);
+                Environment.Exit(0);
             }
         }
 
         public void AddDictionary()
-        {       
-            userName = client.Recieve(storedMessages);
-            users.Add(userName, client.userId);
+        {
+            users.Add(client.userName, client.userId);
         }
 
         public void DisplayUserConnection()
         {
-            Console.Write("Connected: " + userName + "\n");
+            Console.Write("Connected: " + client.userName + "\n");
         }
 
         public void DisplayUserExit()
-        {
-            Console.Write("Disconnected: " + userName + "\n");
+        {         
+            users.Remove(client.userName);
+            if (!users.ContainsKey(client.userName))
+            {
+                Console.Write("Disconnected: " + client.userName + "\n");
+            }
         }
-
 
         private void AcceptClient()
         {
@@ -82,6 +86,7 @@ namespace Server
             NetworkStream stream = clientSocket.GetStream();
             client = new ServerClient(stream, clientSocket);
         }
+
         private void Respond(string body)
         {
             client.Send(body);
@@ -92,7 +97,7 @@ namespace Server
             bool userCheck = false;
             foreach (KeyValuePair<string, string> name in users)
             {
-                if (users.ContainsKey(userName))
+                if (users.ContainsKey(client.userName))
                 {
                     userCheck = true;
                 }
@@ -103,7 +108,6 @@ namespace Server
             }
             return userCheck;
         }
-
 
     }
 }
