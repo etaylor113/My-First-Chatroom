@@ -14,7 +14,7 @@ namespace Client
         }
         public static string GetInput()
         {
-            Console.WriteLine("Type a message");
+            Console.WriteLine("Type a message:");
             string input = Console.ReadLine();                       
                 return input;                      
         }
@@ -23,6 +23,7 @@ namespace Client
         {
             Console.WriteLine("Please enter your username:");
             string userName = Console.ReadLine();
+            Console.Clear();
             return userName;
         }        
     }

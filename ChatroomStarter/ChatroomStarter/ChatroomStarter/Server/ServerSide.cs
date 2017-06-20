@@ -16,10 +16,9 @@ namespace Server
     {
         public static ServerClient client;
         TcpListener server;
-        public string userName;
         public bool userCheck;
         public bool serverRunning;
-
+        public string userName;
         public List<byte> nameList = new List<byte>();
         public Queue<string> storedMessages = new Queue<string>();
         public Dictionary<string, string> users = new Dictionary<string, string>
@@ -58,15 +57,22 @@ namespace Server
         }
 
         public void AddDictionary()
-        {
-            userName = client.Recieve(storedMessages);
-            users.Add(userName, client.userId);
+        {       
+           string UserName = client.Recieve(storedMessages);
+
+            users.Add(UserName, client.userId);
         }
 
         public void DisplayUserConnection()
         {
             Console.Write("Connected: " + userName + "\n");
         }
+
+        public void DisplayUserExit()
+        {
+            Console.Write(userName + " has disconnected.");
+        }
+
 
         private void AcceptClient()
         {

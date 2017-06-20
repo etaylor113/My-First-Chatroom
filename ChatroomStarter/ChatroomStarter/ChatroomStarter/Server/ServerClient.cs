@@ -12,9 +12,8 @@ namespace Server
         NetworkStream stream;
         TcpClient client;       
         public string userId;
-        public string UserName;    
-        
- 
+        public string userName;
+
         public ServerClient(NetworkStream Stream, TcpClient Client)
         {           
             userId = Guid.NewGuid().ToString();               
@@ -30,29 +29,38 @@ namespace Server
         //}
         public void Send(string Message)
         {
-           byte [] message = Encoding.ASCII.GetBytes(Message);
-           stream.Write(message, 0, message.Count());
+            try
+            {
+                byte[] message = Encoding.ASCII.GetBytes(Message);
+                stream.Write(message, 0, message.Count());
+            }
+            catch
+            {
+                DisplayUserDisconnected();
+            }
         }
 
         public string Recieve(Queue<string> storedMessages)
         {
-         
+            string recievedMessageString= "";
             try
             {
                 byte[] recievedMessage = new byte[256];              
                 stream.Read(recievedMessage, 0, recievedMessage.Length);
-                string recievedMessageString = Encoding.ASCII.GetString(recievedMessage);
+                recievedMessageString = Encoding.ASCII.GetString(recievedMessage).Replace("/0",string.Empty);
                 storedMessages.Enqueue(recievedMessageString);
-                Console.WriteLine(recievedMessageString);
-                return recievedMessageString;
+                Console.WriteLine(recievedMessageString);                
             }
             catch
             {
-                Console.WriteLine("A user has left the room.");
-                Environment.Exit(0);
-                return Console.ReadLine();
+                DisplayUserDisconnected();               
             }
+            return recievedMessageString;
         }
 
+        public void DisplayUserDisconnected()
+        {
+            Console.WriteLine(Client.Client.userName + " has left the room.");
+        }
     }
 }

@@ -21,3 +21,5 @@ C:\Users\Taylo\Desktop\DevProjects\C# Visual Studio\My-First-Chatroom\ChatroomSt
 C:\Users\Taylo\Desktop\DevProjects\C# Visual Studio\My-First-Chatroom\ChatroomStarter\ChatroomStarter\ChatroomStarter\Server\bin\Debug\Server.exe
 C:\Users\Taylo\Desktop\DevProjects\C# Visual Studio\My-First-Chatroom\ChatroomStarter\ChatroomStarter\ChatroomStarter\Server\bin\Debug\Server.pdb
 C:\Users\Taylo\Desktop\DevProjects\C# Visual Studio\My-First-Chatroom\ChatroomStarter\ChatroomStarter\ChatroomStarter\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+C:\Users\Taylo\Desktop\DevProjects\C# Visual Studio\My-First-Chatroom\ChatroomStarter\ChatroomStarter\ChatroomStarter\Server\bin\Debug\Client.exe
+C:\Users\Taylo\Desktop\DevProjects\C# Visual Studio\My-First-Chatroom\ChatroomStarter\ChatroomStarter\ChatroomStarter\Server\bin\Debug\Client.pdb

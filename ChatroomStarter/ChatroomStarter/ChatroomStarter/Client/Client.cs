@@ -12,13 +12,13 @@ namespace Client
     {
         TcpClient clientSocket;
         NetworkStream stream;
-        public string userName;
+        static public string userName;
         public string messageString;
         public bool runUserMsg = true;
 
         public Client(string IP, int port)
         {
-            userName = UI.GetUserName();
+            
             clientSocket = new TcpClient();
             clientSocket.Connect(IPAddress.Parse(IP), port);
             stream = clientSocket.GetStream();
@@ -27,21 +27,27 @@ namespace Client
         public void RunClient()
         {
             runUserMsg = true;
+            
             while (runUserMsg == true)
-            {              
+            {
                 messageString = Send();
-                if (messageString == "/leave")
+                if (messageString == "/exit")
                 {
                     Exit();
                 }
-                Recieve();                                            
-            }          
+                else if (messageString != "/exit")
+                {
+                    Recieve();
+                }                
+            }
         }
 
-        public void SendUserName()
+        public string SendUserName()
         {
+            userName = UI.GetUserName();
             byte[] messageUser = Encoding.ASCII.GetBytes(userName);
             stream.Write(messageUser, 0, messageUser.Count());
+            return userName;
         }
 
         public string Send()
@@ -51,6 +57,7 @@ namespace Client
             stream.Write(message, 0, message.Count());
             return messageString;
         }
+
         public void Recieve()
         {
             byte[] recievedMessage = new byte[256];
@@ -60,6 +67,8 @@ namespace Client
 
         private void Exit()
         {
+            string exitingUser = userName;
+
             runUserMsg = false;
         }
     }
