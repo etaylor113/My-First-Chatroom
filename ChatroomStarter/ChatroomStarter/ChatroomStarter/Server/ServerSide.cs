@@ -20,10 +20,7 @@ namespace Server
         public bool serverRunning;
         public List<byte> nameList = new List<byte>();
         public Queue<string> storedMessages = new Queue<string>();
-        public Dictionary<string, string> users = new Dictionary<string, string>
-        {
-
-        };
+        
 
         public Server()
         {
@@ -35,35 +32,21 @@ namespace Server
         {
             string message;
             bool serverRunning = true;
-            CheckDictionary();
+
+            
             AcceptClient();
             client.RecieveUserName();
             DisplayUserConnection();
-            AddDictionary();
+            client.AddDictionary();
+            client.CheckDictionary();
             while (serverRunning == true)
-            {
-                TestServerUsers();
+            {                
                 message = client.Recieve(storedMessages);
+                client.TestServerUsers();
                 Respond(message);              
             }
         }
-
-        public void TestServerUsers()
-        {
-            if (users.Count == 0)
-            {
-                serverRunning = false;
-                Console.WriteLine("No users in chatroom. Server shutting down.");
-                Thread.Sleep(2000);
-                Environment.Exit(0);
-            }
-        }
-
-        public void AddDictionary()
-        {
-            users.Add(client.userName, client.userId);
-        }
-
+     
         public void DisplayUserConnection()
         {
             Console.Write("Connected: " + client.userName + "\n");
@@ -71,10 +54,10 @@ namespace Server
 
         public void DisplayUserExit()
         {         
-            users.Remove(client.userName);
-            if (!users.ContainsKey(client.userName))
+            client.users.Remove(client.userName);
+            if (!client.users.ContainsKey(client.userName))
             {
-                Console.Write("Disconnected: " + client.userName + "\n");
+                Console.Write(client.userName + " has disconnected.\n");
             }
         }
 
@@ -89,24 +72,16 @@ namespace Server
 
         private void Respond(string body)
         {
-            client.Send(body);
-        }
-
-        public bool CheckDictionary()
-        {
-            bool userCheck = false;
-            foreach (KeyValuePair<string, string> name in users)
+            try
             {
-                if (users.ContainsKey(client.userName))
-                {
-                    userCheck = true;
-                }
-                else
-                {
-                    userCheck = false;
-                }
+                client.Send(body);
+                storedMessages.Dequeue();
             }
-            return userCheck;
+            catch
+            {
+                client.TestServerUsers();
+            }
+                     
         }
 
     }

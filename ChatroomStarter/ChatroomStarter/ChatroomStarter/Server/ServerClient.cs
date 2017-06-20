@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace Server
 {
@@ -13,7 +17,10 @@ namespace Server
         TcpClient client;       
         public string userId;
         public string userName;
+        public Dictionary<string, string> users = new Dictionary<string, string>
+        {
 
+        };
         public ServerClient(NetworkStream Stream, TcpClient Client)
         {           
             userId = Guid.NewGuid().ToString();               
@@ -56,14 +63,47 @@ namespace Server
             }
             catch
             {
-                DisplayUserDisconnected();               
+                users.Remove(userName);
+                DisplayUserDisconnected();
             }
             return recievedMessageString;
         }
 
         public void DisplayUserDisconnected()
-        {
+        {            
             Console.WriteLine(userName + " has left the room.");
+        }
+
+        public void TestServerUsers()
+        {
+            if (users.Count == 0)
+            {
+                Console.WriteLine("No users in chatroom. Server shutting down.");
+                Thread.Sleep(2000);
+                Environment.Exit(0);
+            }
+        }
+
+        public void AddDictionary()
+        {
+            users.Add(userName, userId);
+        }
+
+        public bool CheckDictionary()
+        {
+            bool userCheck = false;
+            foreach (KeyValuePair<string, string> name in users)
+            {
+                if (users.ContainsKey(userName))
+                {
+                    userCheck = true;
+                }
+                else
+                {
+                    userCheck = false;
+                }
+            }
+            return userCheck;
         }
     }
 }
